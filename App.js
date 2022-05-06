@@ -1,5 +1,6 @@
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
+import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PROTOCOL, LANGUAGE, UNITS, CNT, APPID, BASE_URL } from '@env'
 
 export default function App() {
   const [cidade, setCidade] = useState('')
@@ -7,11 +8,16 @@ export default function App() {
   const capturarCidade = (cidadeDigitada) => {
     setCidade(cidadeDigitada)
   }
-  const lang = 'pt_br'
-  const units = 'metric'
-  const cnt = 10
-  const appid = '318b95979710913ce047b983f5578120'
-  const endPoint = `https://api.openweathermap.org/data/2.5/forecast?lang=${lang}&units=${units}&cnt=${cnt}&appid=${appid}&q=`
+  const obterPrevisoes = () => {
+    const endPoint = `${PROTOCOL}://${BASE_URL}?lang=${LANGUAGE}&units=${UNITS}&cnt=${CNT}&appid=${APPID}&q=${cidade}`
+    fetch(endPoint)
+    .then(response => {
+      return response.json()
+    })
+    .then(dados => {
+      setPrevisoes(dados['list'])
+    })
+  }
 
   return (
     <View style={styles.containerView}>
@@ -22,12 +28,15 @@ export default function App() {
           value={cidade}
           onChangeText={capturarCidade}
         />
-        <Button title="OK" />
+        <Button 
+          title="OK" 
+          onPress={obterPrevisoes}
+        />
       </View>
       <FlatList
         data={previsoes}
         renderItem={p => (
-          <Text>{JSON.stringify(previsao)}</Text>
+          <Text>{JSON.stringify(p)}</Text>
         )}
       />
     </View>
