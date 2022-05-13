@@ -18,7 +18,8 @@ const PrevisaoItem = ({previsao}) => {
             />
             <View>
                 <View style={styles.primeiraLinha}>
-                    <Text>data e descrição</Text>
+                    <Text>data: {new Date(dt * 1000).toLocaleDateString()} </Text>
+                    <Text>descrição: {description}</Text>
                 </View>
                 <View style={styles.segundaLinha}>
                     <Text style={styles.valor}>Temp min: {temp_min+"\u00BBC"}</Text>
